@@ -1,0 +1,23 @@
+Contenido:
+
+0-leeme.txt   -> este archivo
+
+Ficheros para la tarea obligatoria:
+
+  efe01.xml     -> fichero de documentos
+  ...
+  efe10.xml     -> fichero de documentos
+
+  topics.xml    -> consultas [desde la 11 a la 35]
+  
+  qrels.txt     -> juicios de relevancia para esas consultas
+  qrels_rel.txt -> juicios de relevancia positivos
+  
+  vacias.txt    -> fichero de palabras vacías
+  
+  categorias3500.xml -> fichero con categorías (vea el campo CATEGORY)
+  
+
+
+
+
