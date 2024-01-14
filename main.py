@@ -1,9 +1,8 @@
+from constants import CLOUD_ID, ELASTIC_PASSWORD, INDEX_NAMES, INDEX_REFERENCE_NAME
 from elasticsearch import Elasticsearch
 from uploadDocsES import LoaderES
-from customIndexes import createAllCustomIndexes
-
-ELASTIC_PASSWORD = "ZLELhLuhJsVN3piwvRU350JW"
-CLOUD_ID = "rec-info:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvOjQ0MyRlYmQ1NWZkNjY5Mzk0ZmRjODg1ZjBlZjY0ODMwYzIzMSQ4MzliZjA0M2IxZjY0NmFmOTkyOGI3MGU0ODhiYjJhNw=="
+from customIndexes import createCustomIndex
+from search import PerformSearch
 
 def createESClient():
     client = Elasticsearch(
@@ -12,14 +11,17 @@ def createESClient():
     )
     return client
 
+
 def main():
     esClient = createESClient()
 
     loader = LoaderES(esClient)
-    if not esClient.indices.exists(index="reference"):
+    if not esClient.indices.exists(index=INDEX_REFERENCE_NAME):
         loader.initialUploadToES() #Es mas eficiente computacionalmente crear un unico indice (solo parseo los XML una vez)
                                    # y despues definir todos los otros en funcion a este, pero usando la API de ES
 
-    createAllCustomIndexes(esClient)
+    for index_name in INDEX_NAMES:
+        createCustomIndex(esClient, index_name)
+        PerformSearch(esClient, index_name, writeFile=True)
 
 main()

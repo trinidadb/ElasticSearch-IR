@@ -1,3 +1,4 @@
+from constants import INDEX_REFERENCE_NAME
 
 class Index():
 
@@ -14,7 +15,7 @@ class Index():
     def _populateIndexFromReference(self):
         # Reindexa los documentos del índice existente al nuevo índice.
         reindex_body = {
-            "source": {"index": "reference"},
+            "source": {"index": INDEX_REFERENCE_NAME},
             "dest": {"index": self.index_name},
         }
         self.esClient.reindex(body=reindex_body)    
@@ -50,8 +51,7 @@ class Index():
                 "properties": {
                     "doc_id": {"type": "keyword"},
                     "category": {"type": "keyword"},
-                    "content": {"type": "text", "analyzer": "spanish_analyzer"},
-                    "query_id": {"type": "keyword"},
+                    "content": {"type": "text", "analyzer": "spanish_analyzer"}
                 }
             }
         }
@@ -69,27 +69,38 @@ class Index():
         return index_settings
     
 
-def createAllCustomIndexes(esClient):
+def createCustomIndex(esClient, index_name):
 
-    #Clear state
-    esClient.indices.delete(index="base")
-    esClient.indices.delete(index="vacias_txt")
-    esClient.indices.delete(index="snowball_stm")
-    esClient.indices.delete(index="dfr")
+    try:
+        esClient.indices.delete(index=index_name)
+    except:
+        pass
 
-    with open("files/vacias.txt", "r", encoding="utf-8") as file:
-        stopwords_vaciasTXT = [line.strip() for line in file.readlines()]
+    match index_name:
+        case "base":
+            stopwords = "_spanish_"   #"_spanish_" --> Lista procedente de Snowball
+            stemmer = "light_spanish" #"light_spanish" --> Procedente de la página de recursos de Jacques Savoy
+            useDFR = False
 
-    Index(esClient, "base").create(stopwords="_spanish_", stemmer="light_spanish") #"_spanish_" --> Lista procedente de Snowball
-                                                                                   #"light_spanish" --> Procedente de la página de recursos de Jacques Savoy
-    print("base index created")
-    Index(esClient, "vacias_txt").create(stopwords=stopwords_vaciasTXT, stemmer="light_spanish") #"light_spanish" --> Procedente de la página de recursos de Jacques Savoy    
-    print("vacias_txt index created")
-    Index(esClient, "snowball_stm").create(stopwords="_spanish_", stemmer="spanish") #"_spanish_" --> Lista procedente de Snowball
-                                                                                     #"spanish" --> Procedente de Snowball
-    print("snowball_stm index created")
-    Index(esClient, "dfr").create(stopwords="_spanish_", stemmer="light_spanish", useDFR=True) #"_spanish_" --> Lista procedente de Snowball
-                                                                                   #"light_spanish" --> Procedente de la página de recursos de Jacques Savoy
-    print("dfr index created")
+        case "vacias_txt":
+            with open("files/vacias.txt", "r", encoding="utf-8") as file:
+                stopwords_vaciasTXT = [line.strip() for line in file.readlines()]
+
+            stopwords = stopwords_vaciasTXT
+            stemmer = "light_spanish"
+            useDFR = False
+
+        case "snowball_stm":
+            stopwords = "_spanish_"
+            stemmer = "spanish"       #"spanish" --> Procedente de Snowball
+            useDFR = False
+
+        case "dfr":
+            stopwords = "_spanish_"
+            stemmer = "light_spanish"
+            useDFR = True
+
+    Index(esClient, index_name).create(stopwords=stopwords, stemmer=stemmer, useDFR=useDFR)
+    print(f"{index_name} index created")
 
     

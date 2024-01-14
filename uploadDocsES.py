@@ -1,4 +1,5 @@
 import xml.etree.ElementTree as ET
+from constants import INDEX_REFERENCE_NAME
 
 document_files = ["efe01.xml", "efe02.xml", "efe03.xml", "efe04.xml", "efe05.xml", "efe06.xml", "efe07.xml", "efe08.xml", "efe09.xml", "efe10.xml"]
 query_file = "topics.xml"
@@ -8,11 +9,10 @@ class LoaderES():
     def __init__(self, esClient, files_folder='files/'):
         self.esClient = esClient
         self.files_folder = files_folder
-        self.referenceIndexName = "reference"
 
     def initialUploadToES(self):
-        self._index_documents(self.referenceIndexName, document_files=document_files)
-        self._index_queries(self.referenceIndexName,query_file=query_file)
+        self._index_documents(INDEX_REFERENCE_NAME, document_files=document_files)
+        self._index_queries(INDEX_REFERENCE_NAME,query_file=query_file)
 
     def _index_documents(self, index_name, document_files):
         for document_file in document_files:
