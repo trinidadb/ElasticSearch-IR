@@ -20,32 +20,41 @@ class Index():
         }
         self.esClient.reindex(body=reindex_body)    
 
-    def _defineBasicIndexSettings(self, stopwords, stemmer, similarity=None):
+    def _defineBasicIndexSettings(self, stopwords, stemmer):
         return {
             "settings": {
                 "analysis": {
-                "filter": {
-                    "spanish_stop": {
-                    "type": "stop",
-                    "stopwords": stopwords
+                    "filter": {
+                        "spanish_stop": {
+                            "type": "stop",
+                            "stopwords": stopwords
+                        },
+                        "spanish_stemmer": {
+                            "type": "stemmer",
+                            "language": stemmer
+                        }
                     },
-                    "spanish_stemmer": {
-                    "type": "stemmer",
-                    "language": stemmer
-                    }
-                },
-                "analyzer": {
-                    "spanish_analyzer": {
-                    "type":"spanish",
-                    "tokenizer": "standard",
-                    "filter": [
-                        "lowercase",
-                        "spanish_stop",
-                        "spanish_stemmer"
-                    ]
+                    "analyzer": {
+                        "spanish_analyzer": {
+                            "type": "custom",
+                            "tokenizer": "standard",
+                            "filter": [
+                                "lowercase",
+                                "spanish_stop",
+                                "spanish_stemmer"
+                            ]
+                        },
+                        "default_search_analyzer": {
+                            "type": "custom",
+                            "tokenizer": "standard",
+                            "filter": [
+                                "lowercase",
+                                "spanish_stop",
+                                "spanish_stemmer"
+                            ]
+                        }
                     }
                 }
-                },
             },
             "mappings": {
                 "properties": {

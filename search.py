@@ -9,11 +9,10 @@ class PerformSearch():
         if writeFile:
             self.writeFile()
 
-    def searchDocuments(self, max_docs=2):
+    def searchDocuments(self, max_docs=1000):
         print(f"Performing search task for '{self.index_name}' index")
 
         queries = self._getQueries()
-        print(len(queries))
         for query_id in queries:
             body={"query": {"match": {"content": {"query": queries[query_id]}}}}
             searchResults = self.esClient.search(index=self.index_name, body=body, size=max_docs)
@@ -25,7 +24,6 @@ class PerformSearch():
                 format = f"{query_id} Q0 {searchResult['_source']['doc_id']} {rank} {searchResult['_score']} {self.index_name}"
                 results.append(format)
 
-        print(results)
         print(f"Finished search task for '{self.index_name}' index")
         return results    
     

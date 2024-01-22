@@ -17,6 +17,7 @@ class Evaluate():
 
         # Usamos pivot para transformar el DataFrame
         metrics = metrics.pivot(index='runId', columns='metric', values='value')
+        print(metrics)
         return metrics
     
     def plotCharts(self):
@@ -34,8 +35,9 @@ class Evaluate():
 
         # transpose and plot
         ax = precision.T.plot(figsize=(7, 6))
-        ax.set_ylabel('Absolute Power (log)', fontsize=12)
-        ax.set_xlabel('Frequencies', fontsize=12)
+        ax.set_ylabel('Precision', fontsize=12)
+        ax.set_xlabel('Number of Documents', fontsize=12)
+        #ax.title("Precision at different cut-off points")
         plt.show()
 
         # plt.figure(figsize=(10, 6))
