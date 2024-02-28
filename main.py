@@ -20,8 +20,8 @@ def main():
         loader.initialUploadToES() #Es mas eficiente computacionalmente crear un unico indice (solo parseo los XML una vez)
                                    # y despues definir todos los otros en funcion a este, pero usando la API de ES
 
-    for index_name in INDEX_NAMES:
+    for index_name in INDEX_NAMES: #['base']:
         createCustomIndex(esClient, index_name)
-        PerformSearch(esClient, index_name, writeFile=True)
+        #PerformSearch(esClient, index_name, writeFile=True)
 
 main()

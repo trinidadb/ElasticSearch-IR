@@ -6,9 +6,9 @@ class Index():
         self.esClient = esClient
         self.index_name = index_name    
 
-    def create(self, stopwords, stemmer, useDFR=False):
+    def create(self, stopwords=None, stemmer=None, useDFR=False):
         index_settings = self._defineBasicIndexSettings(stopwords, stemmer)
-        index_settings = self._changeBM25toDFRIndexSettings(index_settings) if useDFR else index_settings
+        #index_settings = self._changeBM25toDFRIndexSettings(index_settings) if useDFR else index_settings
         self.esClient.indices.create(index=self.index_name, body=index_settings) # Define el índice con el analizador SpanishAnalyzer
         self._populateIndexFromReference()
 
@@ -23,44 +23,35 @@ class Index():
     def _defineBasicIndexSettings(self, stopwords, stemmer):
         return {
             "settings": {
-                "analysis": {
-                    "filter": {
-                        "spanish_stop": {
-                            "type": "stop",
-                            "stopwords": stopwords
+                    "analysis": {
+                        "filter": {
+                            "spanish_stop": {
+                                "type": "stop",
+                                "stopwords" : stopwords
+                            },
+                            "spanish_stemmer": {
+                                "type": "stemmer",
+                                "language" : stemmer
+                            }
                         },
-                        "spanish_stemmer": {
-                            "type": "stemmer",
-                            "language": stemmer
-                        }
-                    },
-                    "analyzer": {
-                        "spanish_analyzer": {
-                            "type": "custom",
-                            "tokenizer": "standard",
-                            "filter": [
-                                "lowercase",
-                                "spanish_stop",
-                                "spanish_stemmer"
-                            ]
-                        },
-                        "default_search_analyzer": {
-                            "type": "custom",
-                            "tokenizer": "standard",
-                            "filter": [
-                                "lowercase",
-                                "spanish_stop",
-                                "spanish_stemmer"
-                            ]
-                        }
+                        "analyzer": {
+                            "rebuilt_spanish": {
+                                "type":"custom",
+                                "tokenizer": "standard",
+                                "filter": [
+                                    "lowercase",
+                                    "spanish_stop",
+                                    "spanish_stemmer"
+                                ]
+                            }
+                        }  
                     }
-                }
-            },
-            "mappings": {
+                },
+                "mappings": {
                 "properties": {
                     "doc_id": {"type": "keyword"},
                     "category": {"type": "keyword"},
-                    "content": {"type": "text", "analyzer": "spanish_analyzer"}
+                    "content": {"type": "text", "analyzer": "rebuilt_spanish"}
                 }
             }
         }
@@ -76,6 +67,42 @@ class Index():
                                                     }
                                                 }
         return index_settings
+    
+    def _defineBasicIndexSettings2(self):
+        return {
+                "settings": {
+                    "analysis": {
+                        "filter": {
+                            "spanish_stop": {
+                                "type": "stop",
+                                "stopwords" : "_spanish_"
+                            },
+                            "spanish_stemmer": {
+                                "type": "stemmer",
+                                "language" : "light_spanish"
+                            }
+                        },
+                        "analyzer": {
+                            "rebuilt_spanish": {
+                                "type":"custom",
+                                "tokenizer": "standard",
+                                "filter": [
+                                    "lowercase",
+                                    "spanish_stop",
+                                    "spanish_stemmer"
+                                ]
+                            }
+                        }  
+                    }
+                },
+                "mappings": {
+                "properties": {
+                    "doc_id": {"type": "keyword"},
+                    "category": {"type": "keyword"},
+                    "content": {"type": "text", "analyzer": "rebuilt_spanish"}
+                }
+            }
+            }
     
 
 def createCustomIndex(esClient, index_name):
@@ -110,6 +137,7 @@ def createCustomIndex(esClient, index_name):
             useDFR = True
 
     Index(esClient, index_name).create(stopwords=stopwords, stemmer=stemmer, useDFR=useDFR)
+    #Index(esClient, index_name).create()
     print(f"{index_name} index created")
 
     
