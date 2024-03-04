@@ -13,15 +13,16 @@ class PerformSearch():
         print(f"Performing search task for '{self.index_name}' index")
 
         queries = self._getQueries()
-        for query_id in queries:
-            body={"query": {"match": {"content": {"query": queries[query_id]}}}}
+        
+        results = []
+        for id, query in queries.items():
+            body={"query": {"match": {"content": {"query": query}}}}
             searchResults = self.esClient.search(index=self.index_name, body=body, size=max_docs)
 
             searchResults = searchResults['hits']['hits']
 
-            results = []
             for rank, searchResult in enumerate(searchResults, start=1):
-                format = f"{query_id} Q0 {searchResult['_source']['doc_id']} {rank} {searchResult['_score']} {self.index_name}"
+                format = f"{id} Q0 {searchResult['_source']['doc_id']} {rank} {searchResult['_score']} {self.index_name}"
                 results.append(format)
 
         print(f"Finished search task for '{self.index_name}' index")
