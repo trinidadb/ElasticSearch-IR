@@ -1,6 +1,5 @@
 import subprocess
 import pandas as pd
-import matplotlib.pyplot as plt
 from constants import INDEX_NAMES
 
 class Evaluate():
@@ -54,46 +53,4 @@ class EvaluatorAll(Evaluate):
 class EvaluatorByQuery(Evaluate):
     def __init__(self, firstSortByQuery=True):
         super().__init__(True)
-        self.results = self.evalIndexesSortByQueryId if firstSortByQuery else self.evalIndexesSortByRunId
-
-class Plot():
- 
-    def __init__(self, metrics):
-        self.metrics = metrics
-
-    def showTable(self):
-        otherMetrics = self.metrics.drop(columns=[col for col in self.metrics.columns if col.startswith(('P_', 'iprec_'))])
-        print(otherMetrics)
-
-    def plotRPrecision(self):
-        precisionTable = self.metrics.filter(regex='^P_')
-        precisionTable = precisionTable.rename(columns={'P_5': 5, 'P_10': 10, 'P_15': 15, 'P_20': 20, 'P_30': 30, 'P_100': 100, 'P_200': 200, 'P_500': 500, 'P_1000': 1000})
-        precisionTable.sort_index(axis=1, inplace=True)
-        precisionTable = precisionTable.astype(float)
-
-        # transpose and plot
-        ax = precisionTable.T.plot(figsize=(7, 6))
-        ax.set_ylabel('Precision', fontsize=12)
-        ax.set_xlabel('Number of Documents', fontsize=12)
-        ax.set_title("Precision at different cut-off points")
-        plt.show()
-
-    def plotIPrecAtRecall(self):
-        iPrecisionTable = self.metrics.filter(regex='^iprec_')
-        colRename = {col:float(col[-4:]) for col in iPrecisionTable.columns}
-        iPrecisionTable = iPrecisionTable.rename(columns=colRename)
-        iPrecisionTable = iPrecisionTable.sort_index(axis=1)
-        iPrecisionTable = iPrecisionTable.astype(float)
-
-        # transpose and plot
-        ax = iPrecisionTable.T.plot(figsize=(7, 6))
-        ax.set_ylabel('IPrecision', fontsize=12)
-        ax.set_xlabel('Recall', fontsize=12)
-        ax.set_title("IPrecision VS Recall")
-        plt.show()        
-
-resultsAll = EvaluatorAll()
-resultsByQuery = EvaluatorByQuery(firstSortByQuery=True)
-resultsByQuery = EvaluatorByQuery(firstSortByQuery=False)
-
-Plot(resultsAll.results).plotIPrecAtRecall()
+        self.results = self.evalIndexesSortByQueryId() if firstSortByQuery else self.evalIndexesSortByRunId()
