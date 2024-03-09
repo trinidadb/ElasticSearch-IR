@@ -9,7 +9,7 @@ class Index():
     def create(self, stopwords=None, stemmer=None, useDFR=False):
         index_settings = self._defineBasicIndexSettings(stopwords, stemmer)
         index_settings = self._changeBM25toDFRIndexSettings(index_settings) if useDFR else index_settings
-        self.esClient.indices.create(index=self.index_name, body=index_settings) # Define el índice con el analizador SpanishAnalyzer
+        self.esClient.indices.create(index=self.index_name, body=index_settings)
         self._populateIndexFromReference()
 
     def _populateIndexFromReference(self):
@@ -66,9 +66,6 @@ class Index():
                                                     "normalization.h2.c": "3.0"
                                                     }
                                                 }
-        
-        #index_settings["mappings"]["properties"]["content"] = {"type": "text", "analyzer": "rebuilt_spanish", "similarity":"my_similarity"}
-
         return index_settings
    
 
