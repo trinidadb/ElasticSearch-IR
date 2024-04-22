@@ -22,9 +22,7 @@ class LoaderES():
                 title = document.find('TITLE').text
                 text = document.find('TEXT').text
 
-                # Combina título y texto en un solo campo (ajusta según tus necesidades)
                 content = f"{title} {text}"
-
-                # Indexa el documento en Elasticsearch
                 self.esClient.index(index=index_name, body={"doc_id": doc_id, "category": category, "content": content})
+        
         print(document_file + "already indexed.")

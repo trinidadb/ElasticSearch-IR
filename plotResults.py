@@ -1,9 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 from evaluate import EvaluatorAll, EvaluatorByQuery
-import mplcursors
-import tkinter as tk
-from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
+#import mplcursors
 
 
 resultsAll = EvaluatorAll()
@@ -118,5 +116,6 @@ class Plot():
 #Plot(resultsByRunId.results).plotExtended(True, False)
 #Plot(resultsByRunId.results).plotExtended(True, True)
         
+Plot(resultsAll.results).showTable()        
 #Plot(resultsByQueryId.results).showTable()
-Plot(resultsByRunId.results).showTable()
+#Plot(resultsByRunId.results).showTable()

@@ -44,7 +44,6 @@ class PerformSearch():
             title = topic.find('ES-title').text
             description = topic.find('ES-desc').text
 
-            # Combina título y descripción en un solo campo (ajusta según tus necesidades)
             content = f"{title} {description}"
             formated_queries[query_id] = content
 
