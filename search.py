@@ -33,7 +33,7 @@ class PerformSearch():
         return results    
     
     def writeFile(self, folder):
-        with open(folder+self.index_name+'.txt', "w") as file:
+        with open(folder+'/'+self.index_name+'.txt', "w") as file:
             for string in self.results:
                 file.write(string + "\n")
         print(f"Text file '{folder+self.index_name}.txt' created successfully.")

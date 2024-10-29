@@ -2,7 +2,7 @@ import subprocess
 import os
 import pandas as pd
 
-from constants import INDEX_NAMES, SEARCH_RESULTS_DIR
+from constants import INDEX_NAMES, SEARCH_RESULTS_DIR, EVALUATION_TOOL_DIR
 
 class Evaluate():
 
@@ -29,8 +29,8 @@ class Evaluate():
         return metrics
 
     def _run_trec_eval(self, index_name, trec_rel_file="files/qrels.txt"):
-        trec_top_file = SEARCH_RESULTS_DIR+index_name + ".txt"
-        command = f"{os.path.join(os.getcwd(), 'evaluation-tool', 'trec_eval.exe')} {'-q ' if self.byQuery else ''}{trec_rel_file} {trec_top_file}"
+        trec_top_file = SEARCH_RESULTS_DIR+"/"+index_name + ".txt"
+        command = f"{os.path.join(os.getcwd(), EVALUATION_TOOL_DIR, 'trec_eval.exe')} {'-q ' if self.byQuery else ''}{trec_rel_file} {trec_top_file}"
 
         try:
             result = subprocess.run(command, stdout=subprocess.PIPE, text=True, check=True)
