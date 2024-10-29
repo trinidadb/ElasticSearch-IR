@@ -13,7 +13,7 @@ def createESClient():
     return client
 
 
-def main():
+def search():
     esClient = createESClient()
 
     loader = LoaderES(esClient)
@@ -26,4 +26,5 @@ def main():
         createCustomIndex(esClient, index_name)
         PerformSearch(esClient, index_name, writeFile=True)
 
-main()
+if __name__ == "__main__":
+    search()
