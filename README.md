@@ -24,5 +24,3 @@ The documents and queries are provided in XML files (`efe01.xml` to `efe10.xml` 
 ### Evaluation of Results
 
 The `trec_eval.exe` tool is used to evaluate the retrieval results. `trec_eval` is the standard tool used by the TREC community for evaluating ad-hoc retrieval runs, given a results file and a standard set of judged results.
-
-"""
