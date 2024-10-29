@@ -14,8 +14,7 @@ Ficheros para la tarea obligatoria:
   qrels_rel.txt -> juicios de relevancia positivos
   
   vacias.txt    -> fichero de palabras vacías
-  
-  categorias3500.xml -> fichero con categorías (vea el campo CATEGORY)
+
   
 
 

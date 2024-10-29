@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import pandas as pd
 from evaluate import EvaluatorAll, EvaluatorByQuery
+import os
 #import mplcursors
 
 
@@ -13,9 +14,10 @@ class Plot():
     def __init__(self, metrics):
         self.metrics = metrics
 
-    def showTable(self):
+    def showTable(self, folder="evaluation-results/"):
+        os.makedirs(folder, exist_ok=True)
         otherMetrics = self.metrics.drop(columns=[col for col in self.metrics.columns if col.startswith(('P_', 'iprec_'))])
-        otherMetrics.to_csv("output.csv")
+        otherMetrics.to_csv(folder+"output.csv")
         print(otherMetrics)
 
     def plotExtended(self, byRunId=False, iprecCurve=False):
@@ -109,13 +111,14 @@ class Plot():
             plt.show() 
 
 
-#Plot(resultsAll.results).plotIPrecAtRecall()
-#Plot(resultsAll.results).plotRPrecision()
-#Plot(resultsByQueryId.results).plotExtended(False, False)
-#Plot(resultsByQueryId.results).plotExtended(False, True)
-#Plot(resultsByRunId.results).plotExtended(True, False)
-#Plot(resultsByRunId.results).plotExtended(True, True)
-        
-Plot(resultsAll.results).showTable()        
-#Plot(resultsByQueryId.results).showTable()
-#Plot(resultsByRunId.results).showTable()
+if __name__ == "__main__":
+    #Plot(resultsAll.results).plotIPrecAtRecall()
+    #Plot(resultsAll.results).plotRPrecision()
+    #Plot(resultsByQueryId.results).plotExtended(False, False)
+    #Plot(resultsByQueryId.results).plotExtended(False, True)
+    #Plot(resultsByRunId.results).plotExtended(True, False)
+    #Plot(resultsByRunId.results).plotExtended(True, True)
+
+    Plot(resultsAll.results).showTable()        
+    #Plot(resultsByQueryId.results).showTable()
+    #Plot(resultsByRunId.results).showTable()

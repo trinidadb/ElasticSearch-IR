@@ -20,6 +20,7 @@ def main():
     if not esClient.indices.exists(index=INDEX_REFERENCE_NAME):
         loader.initialUploadToES() #Es mas eficiente computacionalmente crear un unico indice (solo parseo los XML una vez)
                                    # y despues definir todos los otros en funcion a este, pero usando la API de ES
+                                   # Tambien se debe explorar la opcion de subir los elementos por baches
 
     for index_name in INDEX_NAMES:
         createCustomIndex(esClient, index_name)

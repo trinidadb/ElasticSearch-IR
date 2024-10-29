@@ -1,5 +1,6 @@
-ELASTIC_PASSWORD = "r8y1NRuK8bWMv9DmRHtARuCp"
-CLOUD_ID = "rec-info:dXMtY2VudHJhbDEuZ2NwLmNsb3VkLmVzLmlvOjQ0MyRkMzYyYmE0YzBiZjc0Yzc4OGE3OWYzNzk4ODQ4MmQwYSRmZTBlYWE2MWUxY2E0Y2IzYmZiNTk2YTU2M2ZlM2Q3Nw=="
+ELASTIC_PASSWORD = "my-elastic-password"
+CLOUD_ID = "my-cloud-id"
 
 INDEX_REFERENCE_NAME = "reference"
 INDEX_NAMES = ['base', 'vacias_txt', 'snowball_stm', 'dfr']
+SEARCH_RESULTS_DIR = "search-results/"

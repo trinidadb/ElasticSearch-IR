@@ -1,4 +1,7 @@
 import xml.etree.ElementTree as ET
+import os
+
+from constants import SEARCH_RESULTS_DIR
 
 class PerformSearch():
     
@@ -7,7 +10,8 @@ class PerformSearch():
         self.index_name = index_name
         self.results = self.searchDocuments()
         if writeFile:
-            self.writeFile()
+            os.makedirs(SEARCH_RESULTS_DIR, exist_ok=True)
+            self.writeFile(folder=SEARCH_RESULTS_DIR)
 
     def searchDocuments(self, max_docs=1000):
         print(f"Performing search task for '{self.index_name}' index")
@@ -28,11 +32,11 @@ class PerformSearch():
         print(f"Finished search task for '{self.index_name}' index")
         return results    
     
-    def writeFile(self):
-        with open(self.index_name+'.txt', "w") as file:
+    def writeFile(self, folder):
+        with open(folder+self.index_name+'.txt', "w") as file:
             for string in self.results:
                 file.write(string + "\n")
-        print(f"Text file '{self.index_name}.txt' created successfully.")
+        print(f"Text file '{folder+self.index_name}.txt' created successfully.")
 
     def _getQueries(self):
         tree = ET.parse('files/topics.xml')
