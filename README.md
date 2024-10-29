@@ -20,4 +20,9 @@ The Spanish test collection has been sourced from the CLEF conference materials,
 - the associated relevance judgments
 
 The documents and queries are provided in XML files (`efe01.xml` to `efe10.xml` and `topics.xml`). Relevance judgments are in TREC format, located in `qrels.txt`. These files should ideally be in the `files` directory; however, due to privacy and compliance restrictions, they cannot be publicly shared.
+
+### Evaluation of Results
+
+The `trec_eval.exe` tool is used to evaluate the retrieval results. `trec_eval` is the standard tool used by the TREC community for evaluating ad-hoc retrieval runs, given a results file and a standard set of judged results.
+
 """
